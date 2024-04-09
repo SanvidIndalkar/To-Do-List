@@ -26,7 +26,7 @@ const AddTasks = () => {
         }))
     }
 
-    const mutation = useMutation({
+    const mutationAdd = useMutation({
         mutationFn: () =>  axios.post("http://localhost:8080/tasks/add", task),
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey : ["alltasks"]})
@@ -37,7 +37,7 @@ const AddTasks = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        mutation.mutate();
+        mutationAdd.mutate();
     }
 
     return (

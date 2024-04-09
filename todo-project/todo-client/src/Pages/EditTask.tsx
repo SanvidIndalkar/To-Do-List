@@ -4,18 +4,23 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+type TaskType = {
+    id: number,
+    taskTitle: string,
+    taskDescription: string,
+    taskStatus: "COMPLETED" | "DELETED" | "PENDING"
+}
+
 const EditTask = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
     const queryClient = useQueryClient();
     
-    const [task, setTask] = useState(location.state);
+    const [task, setTask] = useState<TaskType>(location.state);
     
-    const {id, taskStatus, taskDescription, taskTitle} = task;
-    const updatedTask = useState({
-        id, taskDescription, taskStatus, taskTitle}
-    );
+    const {id, taskStatus, taskDescription, taskTitle} : TaskType = task;
+    
     const handleInputChange = (e) => {
         const {name, value} = e.target;
         console.log(name + " " + value)
@@ -26,11 +31,7 @@ const EditTask = () => {
     }
 
     const mutation = useMutation({
-        mutationFn : () => axios.put("http://localhost:8080/tasks/update/" + id, task),
-        // onSuccess: () => {
-             
-             
-        // }   
+        mutationFn : () => axios.put("http://localhost:8080/tasks/update/" + id, task), 
     })
 
     const handleSubmit = (e) => {

@@ -2,36 +2,28 @@ import React, { Context, useEffect, useState } from "react";
 import { Box, Checkbox, Grid, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
-import { MutationFunction, useMutation, useQueryClient } from "@tanstack/react-query";
+import { MutationFunction, UseMutationResult, useMutation, useQueryClient } from "@tanstack/react-query";
 import { MutateFunction } from "@tanstack/react-query";
 
 
-// -- need to figure out
-// type Task = {
-//     data: {
-//         id: number, taskTitle: string; taskDescription: string;
-//         taskStatus: "COMPLETED" | "PENDING" | "DELETED"
-//     }
-// }
-
-// interface MutationFuncProps{
-//     mutation: MutateFunction
-// }
-
-// interface MutationFuncProps1{
-//     mutationChangeStatus : MutateFunction
-// }
+//typing for props
+type Task = {
+    data: {
+        id: number, taskTitle: string; taskDescription: string;
+        taskStatus: "COMPLETED" | "PENDING" | "DELETED"
+    },
+    mutation: UseMutationResult<AxiosResponse<any, any>, Error, number, unknown>,
+    mutationChangeStatus : UseMutationResult<AxiosResponse<any, any>, Error, number, unknown>
+}
 
 
-
-const SingleTask = ({ data, mutation, mutationChangeStatus }) => {
+const SingleTask: React.FC<Task> = ({ data, mutation, mutationChangeStatus }) => {
 
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     // const { id, taskTitle, taskDescription, taskStatus } = task;
-
 
     useEffect(() => {
         if (mutationChangeStatus.isSuccess) {

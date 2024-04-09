@@ -3,15 +3,29 @@ import React, { useEffect } from "react";
 
 import SingleTask from "./SingleTask.tsx";
 import { Box, Container, Grid } from "@mui/material";
-import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, UseQueryResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+
+type TaskType = {
+    id: number,
+    taskTitle: string,
+    taskDescription: string,
+    taskStatus: "COMPLETED" | "DELETED" | "PENDING"
+}
+
+type ResponseData = {
+    allTasks : TaskType[],
+    length : number,
+    success : boolean
+    message : true
+}
 
 const AllTasks = () => {
 
     const queryClient = useQueryClient();
 
     //fetching all tasks
-    const getAll = useQuery({
+    const getAll : UseQueryResult<ResponseData, Error> = useQuery({
         queryKey: ["alltasks"],
         queryFn: async () => {
             try{
@@ -22,8 +36,8 @@ const AllTasks = () => {
             catch(error){
                 console.log("There is a error " + error)
                 return error;
-                            }
-                        }
+            }
+        }
     })
 
     //mutation delete
@@ -60,7 +74,7 @@ const AllTasks = () => {
         <Box
         margin="1rem 30rem 1rem 30rem">
             <Grid>
-            {data.allTasks?.map((task) => 
+            {data?.allTasks?.map((task: TaskType) => 
                 <SingleTask key = {task.id} data = {task} mutation = {mutation} mutationChangeStatus = {mutationChangeStatus}/>
             )}
             </Grid>
