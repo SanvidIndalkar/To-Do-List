@@ -21,7 +21,7 @@ const EditTask = () => {
     
     const {id, taskStatus, taskDescription, taskTitle} : TaskType = task;
     
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
         const {name, value} = e.target;
         console.log(name + " " + value)
         setTask((t) => ({
